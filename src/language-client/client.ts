@@ -136,22 +136,25 @@ function createConnection(
   inputStream: NodeJS.ReadableStream,
   outputStream: NodeJS.WritableStream,
   errorHandler: ConnectionErrorHandler,
-  closeHandler: ConnectionCloseHandler
+  closeHandler: ConnectionCloseHandler,
+  options?: ConnectionOptions
 ): IConnection
 function createConnection(
   reader: MessageReader,
   writer: MessageWriter,
   errorHandler: ConnectionErrorHandler,
-  closeHandler: ConnectionCloseHandler
+  closeHandler: ConnectionCloseHandler,
+  options?: ConnectionOptions
 ): IConnection
 function createConnection(
   input: any,
   output: any,
   errorHandler: ConnectionErrorHandler,
-  closeHandler: ConnectionCloseHandler
+  closeHandler: ConnectionCloseHandler,
+  options?: ConnectionOptions
 ): IConnection {
   let logger = new ConsoleLogger()
-  let connection = createProtocolConnection(input, output, logger)
+  let connection = createProtocolConnection(input, output, logger, options)
   connection.onError(data => {
     errorHandler(data[0], data[1], data[2])
   })
@@ -3895,7 +3898,8 @@ export abstract class BaseLanguageClient {
         transports.reader,
         transports.writer,
         errorHandler,
-        closeHandler
+        closeHandler,
+        this._clientOptions.connectionOptions
       )
     })
   }
