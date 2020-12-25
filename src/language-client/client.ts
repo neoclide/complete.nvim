@@ -129,8 +129,8 @@ interface ConnectionCloseHandler {
 }
 
 interface ConnectionOptions {
-    cancellationStrategy: CancellationStrategy
-    maxRestartCount?: number
+  cancellationStrategy: CancellationStrategy
+  maxRestartCount?: number
 }
 
 function createConnection(
@@ -723,7 +723,7 @@ export interface LanguageClientOptions {
   workspaceFolder?: WorkspaceFolder
   connectionOptions?: ConnectionOptions
   markdown?: {
-	  isTrusted?: boolean;
+    isTrusted?: boolean;
   }
 }
 
