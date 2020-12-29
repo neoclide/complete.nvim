@@ -1812,7 +1812,7 @@ abstract class WorkspaceFeature<RO, PR> implements DynamicFeature<RO> {
     this._registrations.set(data.id, { disposable: registration[0], provider: registration[1] })
   }
 
-  protected abstract registerLanguageProvider(options: RO): Disposable
+  protected abstract registerLanguageProvider(options: RO): [Disposable, PR]
 
   public unregister(id: string): void {
     const registration = this._registrations.get(id)
@@ -2335,7 +2335,7 @@ class WorkspaceSymbolFeature extends WorkspaceFeature<WorkspaceSymbolRegistratio
     })
   }
 
-  protected registerLanguageProvider(_options: WorkspaceSymbolRegistrationOptions): Disposable {
+  protected registerLanguageProvider(_options: WorkspaceSymbolRegistrationOptions): [Disposable, WorkspaceSymbolProvider] {
     const provider: WorkspaceSymbolProvider = {
       provideWorkspaceSymbols: (query, token) => {
         const client = this._client
@@ -2353,7 +2353,7 @@ class WorkspaceSymbolFeature extends WorkspaceFeature<WorkspaceSymbolRegistratio
           : provideWorkspaceSymbols(query, token)
       }
     }
-    return languages.registerWorkspaceSymbolProvider(provider)
+    return [languages.registerWorkspaceSymbolProvider(provider), provider]
   }
 }
 
