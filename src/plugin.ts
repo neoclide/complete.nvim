@@ -390,6 +390,9 @@ export default class Plugin extends EventEmitter {
     this.addAction('callHierarchy', () => {
       return this.handler.getCallHierarchy()
     })
+    this.addAction('semanticTokens', () => {
+      return this.handler.getSemanticTokens()
+    })
     commandManager.init(nvim, this)
   }
 
