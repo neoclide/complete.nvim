@@ -266,7 +266,7 @@ export enum CloseAction {
 }
 
 /**
- * A pluggable error handler that is invoked when the connection is either
+ * A plugable error handler that is invoked when the connection is either
  * producing errors or got closed.
  */
 export interface ErrorHandler {
@@ -511,7 +511,7 @@ export interface _WorkspaceMiddleware {
 export type WorkspaceMiddleware = _WorkspaceMiddleware & ConfigurationWorkspaceMiddleware & WorkspaceFolderWorkspaceMiddleware
 
 /**
- * The Middleware lets extensions intercept the request and notications send and received
+ * The Middleware lets extensions intercept the request and notifications send and received
  * from the server
  */
 export interface _Middleware {
@@ -710,7 +710,7 @@ export interface LanguageClientOptions {
   revealOutputChannelOn?: RevealOutputChannelOn
   /**
    * The encoding use to read stdout and stderr. Defaults
-   * to 'utf8' if ommitted.
+   * to 'utf8' if omitted.
    */
   stdioEncoding?: string
   initializationOptions?: any | (() => any)
@@ -745,9 +745,9 @@ interface ResolvedClientOptions {
   errorHandler: ErrorHandler
   middleware: Middleware
   workspaceFolder?: WorkspaceFolder
-  connectionOptions?: ConnectionOptions;
+  connectionOptions?: ConnectionOptions
   markdown: {
-    isTrusted: boolean;
+    isTrusted: boolean
   }
 }
 
@@ -907,12 +907,12 @@ export interface DynamicFeature<RO> {
 
   /**
    * Initialize the feature. This method is called on a feature instance
-   * when the client has successfully received the initalize request from
+   * when the client has successfully received the initialize request from
    * the server and before the client sends the initialized notification
    * to the server.
    *
    * @param capabilities the server capabilities.
-   * @param documentSelector the document selector pass to the client's constuctor.
+   * @param documentSelector the document selector pass to the client's constructor.
    *  May be `undefined` if the client was created without a selector.
    */
   initialize(
@@ -928,7 +928,6 @@ export interface DynamicFeature<RO> {
   /**
    * Is called when the server send a register request for the given message.
    *
-   * @param message the message to register for.
    * @param data additional registration data as defined in the protocol.
    */
   register(data: RegistrationData<RO>): void
@@ -971,7 +970,7 @@ interface CreateParamsSignature<E, P> {
   (data: E): P
 }
 
-abstract class DocumentNotifiactions<P, E>
+abstract class DocumentNotifications<P, E>
   implements DynamicFeature<TextDocumentRegistrationOptions>, NotificationFeature<(data: E) => void> {
   private _listener: Disposable | undefined
   protected _selectors: Map<string, DocumentSelector> = new Map()
@@ -1069,7 +1068,7 @@ abstract class DocumentNotifiactions<P, E>
   }
 }
 
-class DidOpenTextDocumentFeature extends DocumentNotifiactions<DidOpenTextDocumentParams, TextDocument> {
+class DidOpenTextDocumentFeature extends DocumentNotifications<DidOpenTextDocumentParams, TextDocument> {
   constructor(client: BaseLanguageClient, private _syncedDocuments: Map<string, TextDocument>) {
     super(
       client,
@@ -1079,7 +1078,7 @@ class DidOpenTextDocumentFeature extends DocumentNotifiactions<DidOpenTextDocume
       (textDocument) => {
         return { textDocument: cv.convertToTextDocumentItem(textDocument) }
       },
-      DocumentNotifiactions.textDocumentFilter
+      DocumentNotifications.textDocumentFilter
     )
   }
 
@@ -1145,7 +1144,7 @@ class DidOpenTextDocumentFeature extends DocumentNotifiactions<DidOpenTextDocume
   }
 }
 
-class DidCloseTextDocumentFeature extends DocumentNotifiactions<
+class DidCloseTextDocumentFeature extends DocumentNotifications<
   DidCloseTextDocumentParams,
   TextDocument
   > {
@@ -1159,7 +1158,7 @@ class DidCloseTextDocumentFeature extends DocumentNotifiactions<
       DidCloseTextDocumentNotification.type,
       client.clientOptions.middleware!.didClose,
       (textDocument) => cv.asCloseTextDocumentParams(textDocument),
-      DocumentNotifiactions.textDocumentFilter
+      DocumentNotifications.textDocumentFilter
     )
   }
 
@@ -1351,7 +1350,7 @@ class DidChangeTextDocumentFeature
   }
 }
 
-class WillSaveFeature extends DocumentNotifiactions<WillSaveTextDocumentParams, TextDocumentWillSaveEvent> {
+class WillSaveFeature extends DocumentNotifications<WillSaveTextDocumentParams, TextDocumentWillSaveEvent> {
   constructor(client: BaseLanguageClient) {
     super(
       client,
@@ -1359,7 +1358,7 @@ class WillSaveFeature extends DocumentNotifiactions<WillSaveTextDocumentParams, 
       WillSaveTextDocumentNotification.type,
       client.clientOptions.middleware!.willSave,
       willSaveEvent => cv.asWillSaveTextDocumentParams(willSaveEvent),
-      (selectors, willSaveEvent) => DocumentNotifiactions.textDocumentFilter(selectors, willSaveEvent.document)
+      (selectors, willSaveEvent) => DocumentNotifications.textDocumentFilter(selectors, willSaveEvent.document)
     )
   }
 
@@ -1435,7 +1434,7 @@ class WillSaveWaitUntilFeature implements DynamicFeature<TextDocumentRegistratio
   }
 
   private callback(event: TextDocumentWillSaveEvent): void {
-    if (DocumentNotifiactions.textDocumentFilter(
+    if (DocumentNotifications.textDocumentFilter(
       this._selectors.values(),
       event.document)) {
       let middleware = this._client.clientOptions.middleware!
@@ -1478,7 +1477,7 @@ class WillSaveWaitUntilFeature implements DynamicFeature<TextDocumentRegistratio
   }
 }
 
-class DidSaveTextDocumentFeature extends DocumentNotifiactions<
+class DidSaveTextDocumentFeature extends DocumentNotifications<
   DidSaveTextDocumentParams,
   TextDocument
   > {
@@ -1495,7 +1494,7 @@ class DidSaveTextDocumentFeature extends DocumentNotifiactions<
           textDocument,
           this._includeText
         ),
-      DocumentNotifiactions.textDocumentFilter
+      DocumentNotifications.textDocumentFilter
     )
   }
 
