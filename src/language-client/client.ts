@@ -1851,9 +1851,9 @@ class CompletionItemFeature extends TextDocumentFeature<CompletionOptions, Compl
     super(client, CompletionRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     let snippetSupport = this._client.clientOptions.disableSnippetCompletion !== true
-    let completion = ensure(ensure(capabilites, 'textDocument')!, 'completion')!
+    let completion = ensure(ensure(capabilities, 'textDocument')!, 'completion')!
     completion.dynamicRegistration = true
     completion.contextSupport = true
     completion.completionItem = {
@@ -1863,7 +1863,7 @@ class CompletionItemFeature extends TextDocumentFeature<CompletionOptions, Compl
       deprecatedSupport: true,
       preselectSupport: true,
       tagSupport: { valueSet: [CompletionItemTag.Deprecated] },
-      // TODO: capabilites
+      // TODO: capabilities
       // insertReplaceSupport: true,
       // resolveSupport: {
       //   properties: ['documentation', 'detail', 'additionalTextEdits']
@@ -1952,9 +1952,9 @@ class HoverFeature extends TextDocumentFeature<
     super(client, HoverRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     const hoverCapability = ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'hover'
     )!
     hoverCapability.dynamicRegistration = true
@@ -2009,8 +2009,8 @@ class SignatureHelpFeature extends TextDocumentFeature<
     super(client, SignatureHelpRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    let config = ensure(ensure(capabilites, 'textDocument')!, 'signatureHelp')!
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    let config = ensure(ensure(capabilities, 'textDocument')!, 'signatureHelp')!
     config.dynamicRegistration = true
     config.contextSupport = true
     config.signatureInformation = {
@@ -2073,8 +2073,8 @@ class DefinitionFeature extends TextDocumentFeature<
     super(client, DefinitionRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    let definitionSupport = ensure(ensure(capabilites, 'textDocument')!, 'definition')!
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    let definitionSupport = ensure(ensure(capabilities, 'textDocument')!, 'definition')!
     definitionSupport.dynamicRegistration = true
     // definitionSupport.linkSupport = true
   }
@@ -2126,9 +2126,9 @@ class ReferencesFeature extends TextDocumentFeature<
     super(client, ReferencesRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'references'
     )!.dynamicRegistration = true
   }
@@ -2179,9 +2179,9 @@ class DocumentHighlightFeature extends TextDocumentFeature<
     super(client, DocumentHighlightRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'documentHighlight'
     )!.dynamicRegistration = true
   }
@@ -2232,8 +2232,8 @@ class DocumentSymbolFeature extends TextDocumentFeature<
     super(client, DocumentSymbolRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    let symbolCapabilities = ensure(ensure(capabilites, 'textDocument')!, 'documentSymbol')! as any
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    let symbolCapabilities = ensure(ensure(capabilities, 'textDocument')!, 'documentSymbol')! as any
     symbolCapabilities.dynamicRegistration = true
     symbolCapabilities.symbolKind = {
       valueSet: SupportedSymbolKinds
@@ -2242,7 +2242,7 @@ class DocumentSymbolFeature extends TextDocumentFeature<
     symbolCapabilities.tagSupport = {
       valueSet: SupportedSymbolTags
     }
-    // TODO: capabilites
+    // TODO: capabilities
     // symbolCapabilities.labelSupport = true
   }
 
@@ -2308,9 +2308,9 @@ class WorkspaceSymbolFeature extends WorkspaceFeature<WorkspaceSymbolRegistratio
     super(client, WorkspaceSymbolRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     let symbolCapabilities = ensure(
-      ensure(capabilites, 'workspace')!,
+      ensure(capabilities, 'workspace')!,
       'symbol'
     )! as any
     symbolCapabilities.dynamicRegistration = true
@@ -2360,8 +2360,8 @@ class CodeActionFeature extends TextDocumentFeature<boolean | CodeActionOptions,
     super(client, CodeActionRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    const cap = ensure(ensure(capabilites, 'textDocument')!, 'codeAction')!
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    const cap = ensure(ensure(capabilities, 'textDocument')!, 'codeAction')!
     cap.dynamicRegistration = true
     cap.isPreferredSupport = true
     cap.disabledSupport = true
@@ -2466,12 +2466,12 @@ class CodeLensFeature extends TextDocumentFeature<CodeLensOptions, CodeLensRegis
     super(client, CodeLensRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'codeLens'
     )!.dynamicRegistration = true
-    ensure(ensure(capabilites, 'workspace')!,
+    ensure(ensure(capabilities, 'workspace')!,
       'codeLens'
     )!.refreshSupport = true
   }
@@ -2549,9 +2549,9 @@ class DocumentFormattingFeature extends TextDocumentFeature<
     super(client, DocumentFormattingRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'formatting'
     )!.dynamicRegistration = true
   }
@@ -2606,9 +2606,9 @@ class DocumentRangeFormattingFeature extends TextDocumentFeature<
     super(client, DocumentRangeFormattingRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
     ensure(
-      ensure(capabilites, 'textDocument')!,
+      ensure(capabilities, 'textDocument')!,
       'rangeFormatting'
     )!.dynamicRegistration = true
   }
@@ -2662,8 +2662,8 @@ class DocumentOnTypeFormattingFeature extends TextDocumentFeature<
     super(client, DocumentOnTypeFormattingRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    ensure(ensure(capabilites, 'textDocument')!, 'onTypeFormatting')!.dynamicRegistration = true
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    ensure(ensure(capabilities, 'textDocument')!, 'onTypeFormatting')!.dynamicRegistration = true
   }
 
   public initialize(capabilities: ServerCapabilities, documentSelector: DocumentSelector): void {
@@ -2714,8 +2714,8 @@ class RenameFeature extends TextDocumentFeature<boolean | RenameOptions, RenameR
     super(client, RenameRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    let rename = ensure(ensure(capabilites, 'textDocument')!, 'rename')!
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    let rename = ensure(ensure(capabilities, 'textDocument')!, 'rename')!
     rename.dynamicRegistration = true
     rename.prepareSupport = true
     // TODO: capabilities
@@ -2809,8 +2809,8 @@ class DocumentLinkFeature extends TextDocumentFeature<DocumentLinkOptions, Docum
     super(client, DocumentLinkRequest.type)
   }
 
-  public fillClientCapabilities(capabilites: ClientCapabilities): void {
-    const documentLinkCapabilities = ensure(ensure(capabilites, 'textDocument')!, 'documentLink')!
+  public fillClientCapabilities(capabilities: ClientCapabilities): void {
+    const documentLinkCapabilities = ensure(ensure(capabilities, 'textDocument')!, 'documentLink')!
     documentLinkCapabilities.dynamicRegistration = true
     // TODO support tooltip
     documentLinkCapabilities.tooltipSupport = true
