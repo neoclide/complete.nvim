@@ -301,12 +301,12 @@ class DefaultErrorHandler implements ErrorHandler {
   }
   public closed(): CloseAction {
     this.restarts.push(Date.now())
-    if (this.restarts.length < 5) {
+    if (this.restarts.length < this.maxRestartCount) {
       return CloseAction.Restart
     } else {
       let diff = this.restarts[this.restarts.length - 1] - this.restarts[0]
       if (diff <= 3 * 60 * 1000) {
-        window.showMessage(`The "${this.name}" server crashed 5 times in the last 3 minutes. The server will not be restarted.`, 'error')
+        window.showMessage(`The "${this.name}" server crashed ${this.maxRestartCount} times in the last 3 minutes. The server will not be restarted.`, 'error')
         return CloseAction.DoNotRestart
       } else {
         this.restarts.shift()
@@ -3181,7 +3181,7 @@ export abstract class BaseLanguageClient {
       initializationOptions: clientOptions.initializationOptions,
       initializationFailedHandler: clientOptions.initializationFailedHandler,
       progressOnInitialization: !!clientOptions.progressOnInitialization,
-      errorHandler: clientOptions.errorHandler || new DefaultErrorHandler(this._id),
+      errorHandler: clientOptions.errorHandler || this.createDefaultErrorHandler(clientOptions.connectionOptions?.maxRestartCount),
       middleware: clientOptions.middleware || {},
       workspaceFolder: clientOptions.workspaceFolder,
       connectionOptions: clientOptions.connectionOptions,
@@ -3202,6 +3202,7 @@ export abstract class BaseLanguageClient {
     })
     this._onStop = undefined
     this._stateChangeEmitter = new Emitter<StateChangeEvent>()
+    this._trace = Trace.Off
     this._tracer = {
       log: (messageOrDataObject: string | any, data?: string) => {
         if (Is.string(messageOrDataObject)) {
@@ -3393,8 +3394,8 @@ export abstract class BaseLanguageClient {
     return this._diagnostics
   }
 
-  public createDefaultErrorHandler(): ErrorHandler {
-    return new DefaultErrorHandler(this._id)
+  public createDefaultErrorHandler(maxRestartCount?: number): ErrorHandler {
+    return new DefaultErrorHandler(this._id, maxRestartCount ?? 4)
   }
 
   public set trace(value: Trace) {
@@ -3950,7 +3951,12 @@ export abstract class BaseLanguageClient {
       this.error(
         'Connection to server got closed. Server will not be restarted.'
       )
-      this.state = ClientState.Stopped
+      if (this.state === ClientState.Starting) {
+        this._onReadyCallbacks.reject(new Error(`Connection to server got closed. Server will not be restarted.`))
+        this.state = ClientState.StartFailed
+      } else {
+        this.state = ClientState.Stopped
+      }
       this.cleanUp(false, true)
     } else if (action === CloseAction.Restart) {
       this.info('Connection to server got closed. Server will restart.')
