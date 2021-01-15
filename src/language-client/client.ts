@@ -2440,8 +2440,7 @@ class CodeActionFeature extends TextDocumentFeature<boolean | CodeActionOptions,
             return client.sendRequest(CodeActionResolveRequest.type, item, token).then(
               (values) => values,
               (error) => {
-                client.logFailedRequest(CodeActionResolveRequest.type, error)
-                return Promise.resolve(item)
+                return client.handleFailedRequest(CodeActionResolveRequest.type, error, item)
               }
             )
           }
@@ -2508,8 +2507,7 @@ class CodeLensFeature extends TextDocumentFeature<CodeLensOptions, CodeLensRegis
             cv.asCodeLensParams(document),
             token
           ).then(res => res, error => {
-            client.logFailedRequest(CodeLensRequest.type, error)
-            return Promise.resolve([])
+            return client.handleFailedRequest(CodeLensRequest.type, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
