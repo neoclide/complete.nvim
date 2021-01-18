@@ -392,11 +392,7 @@ export default class Handler {
    */
   public async getCallHierarchy(): Promise<boolean> {
     let { doc, position } = await this.getCurrentState()
-    if (doc == null) return false
-    if (!languages.hasProvider('callHierarchy', doc.textDocument)) {
-      window.showMessage(`CallHierarchy provider not found for current document`, 'warning')
-      return false
-    }
+    this.checkProvier('callHierarchy', doc.textDocument)
     await synchronizeDocument(doc)
     let statusItem = this.requestStatusItem
     try {
@@ -421,11 +417,7 @@ export default class Handler {
    */
   public async getSemanticTokens(): Promise<boolean> {
     let { doc } = await this.getCurrentState()
-    if (doc == null) return false
-    if (!languages.hasProvider('semanticTokens', doc.textDocument)) {
-      window.showMessage(`SemantiTokens provider not found for current document`, 'warning')
-      return false
-    }
+    this.checkProvier('semanticTokens', doc.textDocument)
     await synchronizeDocument(doc)
     let statusItem = this.requestStatusItem
     try {
