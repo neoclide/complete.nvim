@@ -422,6 +422,10 @@ class Languages {
     return this.callHierarchyManager.provideCallHierarchyOutgoingCalls(item, token)
   }
 
+  public getLegend(): SemanticTokensLegend {
+    return this.semanticTokensManager.legend
+  }
+
   public async provideDocumentSemanticTokens(document: TextDocument, token: CancellationToken): Promise<SemanticTokens> {
     return this.semanticTokensManager.provideDocumentSemanticTokens(document, token)
   }
