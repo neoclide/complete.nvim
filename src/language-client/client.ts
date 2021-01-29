@@ -1903,7 +1903,7 @@ class CompletionItemFeature extends TextDocumentFeature<CompletionOptions, Compl
             cv.asCompletionParams(document, position, context),
             token
           ).then(result => result, error => {
-            return client.handleFailedRequest(CompletionRequest.type, error, null)
+            return client.handleFailedRequest(CompletionRequest.type, token, error, null)
           })
         }
 
@@ -1921,7 +1921,7 @@ class CompletionItemFeature extends TextDocumentFeature<CompletionOptions, Compl
               item,
               token
             ).then(res => res, error => {
-              return client.handleFailedRequest(CompletionResolveRequest.type, error, item)
+              return client.handleFailedRequest(CompletionResolveRequest.type, token, error, item)
             })
           }
 
@@ -1987,7 +1987,7 @@ class HoverFeature extends TextDocumentFeature<
             cv.asTextDocumentPositionParams(document, position),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(HoverRequest.type, error, null)
+            return client.handleFailedRequest(HoverRequest.type, token, error, null)
           })
         }
 
@@ -2048,7 +2048,7 @@ class SignatureHelpFeature extends TextDocumentFeature<
             cv.asSignatureHelpParams(document, position, context),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(SignatureHelpRequest.type, error, null)
+            return client.handleFailedRequest(SignatureHelpRequest.type, token, error, null)
           }
           )
         }
@@ -2105,7 +2105,7 @@ class DefinitionFeature extends TextDocumentFeature<
             cv.asTextDocumentPositionParams(document, position),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(DefinitionRequest.type, error, null)
+            return client.handleFailedRequest(DefinitionRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2159,7 +2159,7 @@ class ReferencesFeature extends TextDocumentFeature<
             cv.asReferenceParams(document, position, options),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(ReferencesRequest.type, error, null)
+            return client.handleFailedRequest(ReferencesRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2212,7 +2212,7 @@ class DocumentHighlightFeature extends TextDocumentFeature<
             cv.asTextDocumentPositionParams(document, position),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(DocumentHighlightRequest.type, error, null)
+            return client.handleFailedRequest(DocumentHighlightRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2288,7 +2288,7 @@ class DocumentSymbolFeature extends TextDocumentFeature<
               }
             },
             (error) => {
-              return client.handleFailedRequest(DocumentSymbolRequest.type, error, null)
+              return client.handleFailedRequest(DocumentSymbolRequest.type, token, error, null)
             }
           )
         }
@@ -2342,7 +2342,7 @@ class WorkspaceSymbolFeature extends WorkspaceFeature<WorkspaceSymbolRegistratio
           return client.sendRequest(WorkspaceSymbolRequest.type, { query }, token).then(
             res => res,
             error => {
-              return client.handleFailedRequest(WorkspaceSymbolRequest.type, error, null)
+              return client.handleFailedRequest(WorkspaceSymbolRequest.type, token, error, null)
             })
         }
         const middleware = client.clientOptions.middleware!
@@ -2423,7 +2423,7 @@ class CodeActionFeature extends TextDocumentFeature<boolean | CodeActionOptions,
               return values
             },
             (error) => {
-              return client.handleFailedRequest(CodeActionRequest.type, error, null)
+              return client.handleFailedRequest(CodeActionRequest.type, token, error, null)
             }
           )
         }
@@ -2440,7 +2440,7 @@ class CodeActionFeature extends TextDocumentFeature<boolean | CodeActionOptions,
             return client.sendRequest(CodeActionResolveRequest.type, item, token).then(
               (values) => values,
               (error) => {
-                return client.handleFailedRequest(CodeActionResolveRequest.type, error, item)
+                return client.handleFailedRequest(CodeActionResolveRequest.type, token, error, item)
               }
             )
           }
@@ -2509,7 +2509,7 @@ class CodeLensFeature extends TextDocumentFeature<CodeLensOptions, CodeLensRegis
             cv.asCodeLensParams(document),
             token
           ).then(res => res, error => {
-            return client.handleFailedRequest(CodeLensRequest.type, error, null)
+            return client.handleFailedRequest(CodeLensRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2526,7 +2526,7 @@ class CodeLensFeature extends TextDocumentFeature<CodeLensOptions, CodeLensRegis
               codeLens,
               token
             ).then(res => res, error => {
-              return client.handleFailedRequest(CodeLensResolveRequest.type, error, codeLens)
+              return client.handleFailedRequest(CodeLensResolveRequest.type, token, error, codeLens)
             })
           }
           const middleware = client.clientOptions.middleware!
@@ -2582,7 +2582,7 @@ class DocumentFormattingFeature extends TextDocumentFeature<
             options
           }
           return client.sendRequest(DocumentFormattingRequest.type, params, token).then(res => res, (error) => {
-            return client.handleFailedRequest(DocumentFormattingRequest.type, error, null)
+            return client.handleFailedRequest(DocumentFormattingRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2640,7 +2640,7 @@ class DocumentRangeFormattingFeature extends TextDocumentFeature<
             options,
           }
           return client.sendRequest(DocumentRangeFormattingRequest.type, params, token).then(res => res, error => {
-            return client.handleFailedRequest(DocumentRangeFormattingRequest.type, error, null)
+            return client.handleFailedRequest(DocumentRangeFormattingRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2689,7 +2689,7 @@ class DocumentOnTypeFormattingFeature extends TextDocumentFeature<
             options
           }
           return client.sendRequest(DocumentOnTypeFormattingRequest.type, params, token).then(res => res, (error) => {
-            return client.handleFailedRequest(DocumentOnTypeFormattingRequest.type, error, null)
+            return client.handleFailedRequest(DocumentOnTypeFormattingRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2751,7 +2751,7 @@ class RenameFeature extends TextDocumentFeature<boolean | RenameOptions, RenameR
             newName: newName
           }
           return client.sendRequest(RenameRequest.type, params, token).then(res => res, (error: ResponseError<void>) => {
-            return client.handleFailedRequest(RenameRequest.type, error, null)
+            return client.handleFailedRequest(RenameRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2783,7 +2783,7 @@ class RenameFeature extends TextDocumentFeature<boolean | RenameOptions, RenameR
                 return Promise.reject(new Error(`The element can't be renamed.`))
               },
               (error: ResponseError<void>) => {
-                return client.handleFailedRequest(PrepareRenameRequest.type, error, undefined)
+                return client.handleFailedRequest(PrepareRenameRequest.type, token, error, undefined)
               }
             )
           }
@@ -2844,7 +2844,7 @@ class DocumentLinkFeature extends TextDocumentFeature<DocumentLinkOptions, Docum
             },
             token
           ).then(res => res, (error: ResponseError<void>) => {
-            return client.handleFailedRequest(DocumentLinkRequest.type, error, null)
+            return client.handleFailedRequest(DocumentLinkRequest.type, token, error, null)
           })
         }
         const middleware = client.clientOptions.middleware!
@@ -2857,7 +2857,7 @@ class DocumentLinkFeature extends TextDocumentFeature<DocumentLinkOptions, Docum
           const client = this._client
           let resolveDocumentLink: ResolveDocumentLinkSignature = (link, token) => {
             return client.sendRequest(DocumentLinkResolveRequest.type, link, token).then(res => res, (error: ResponseError<void>) => {
-              return client.handleFailedRequest(DocumentLinkResolveRequest.type, error, link)
+              return client.handleFailedRequest(DocumentLinkResolveRequest.type, token, error, link)
             })
           }
           const middleware = client.clientOptions.middleware!
@@ -3046,7 +3046,7 @@ class ExecuteCommandFeature
         arguments: args
       }
       return client.sendRequest(ExecuteCommandRequest.type, params).then(undefined, (error) => {
-        client.handleFailedRequest(ExecuteCommandRequest.type, error, undefined)
+        client.handleFailedRequest(ExecuteCommandRequest.type, undefined, error, undefined)
         throw error
       })
     }
@@ -4287,11 +4287,14 @@ export abstract class BaseLanguageClient {
     return config.locale
   }
 
-  public handleFailedRequest<T>(type: MessageSignature, error: any, defaultValue: T): T {
+  public handleFailedRequest<T>(type: MessageSignature, token: CancellationToken | undefined, error: any, defaultValue: T): T {
     // If we get a request cancel or a content modified don't log anything.
     if (error instanceof ResponseError) {
       if (error.code === LSPErrorCodes.RequestCancelled) {
-        return
+        if (token !== undefined && token.isCancellationRequested) {
+          return defaultValue;
+        }
+        // do not throw error
       } else if (error.code === LSPErrorCodes.ContentModified) {
         return defaultValue
       }
